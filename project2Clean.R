@@ -61,34 +61,37 @@ ggplot(data = data_aggrigateByAlcohol) +
 	labs(title = "Hours of sleep against alcohol consumption")
 
 
-# WIP
-ggplot(data, aes(x = HoursOfSleep, y = OrderedAlcoholConsumed)) + geom_boxplot()
-
-?ggplot
+# TIME WENT TO BED AGAINST QUALITY OF SLEEP
 data$QualityOfSleep
 
 data$OrderedTimeOfSleep <- factor(data$TimeOfSleep, levels = c("earlier than 7:00pm", "7:00pm - 8:00pm", "8:00pm - 9:00pm", 
 															   "9:00pm - 10:00pm" ,"10:00pm - 11:00pm", "11:00pm - 12:00am", 
 															   "12:00am - 1:00am", "1:00am - 2:00am", "after 2:00am"))
 
-## Create a new data frame called data_aggrigateByAlcohol, using the original data set
+# Create a new data frame called data_aggrigateByAlcohol, using the original data set
 data_MeanTimeOfSleep <- data %>% 
-	## group this data by the Alcohol the person consumed
+	# group this data by the Alcohol the person consumed
 	group_by(OrderedTimeOfSleep) %>%  
-	## summarise the variables Hours of sleep and times woken up at this class level. 
+	# summarise the variables Hours of sleep and times woken up at this class level. 
 	#Calculate the mean and label it "avg"; calculate the median and label it "med".  Remove any null values with the na.rm=TRUE
 	summarise_at(vars(HoursOfSleep,TimesWakeUp, QualityOfSleep), list(avg = ~mean(., na.rm=TRUE), med = ~median(., na.rm=TRUE)))
 
 ggplot(data_MeanTimeOfSleep) + 
 	geom_bar(mapping = aes(x = OrderedTimeOfSleep, y = HoursOfSleep_avg, fill = OrderedTimeOfSleep), stat ="identity") + 
-	scale_fill_manual(values=c("#b4f0d5","#b4f0e7","#afeaf0","#afdbf0","#92cdf0", "#97c6f7", "#7b9ae8", "#9da8fa", "#9681f0")) +
+	scale_fill_manual(values=c("#b4f0d5","#b4f0e7","#afeaf0","#afdbf0","#92cdf0", "#97c6f7", "#7b9ae8", "#7682de", "#6470cc")) +
 	xlab("Number of standard drinks consumed per week") + 
 	ylab("Average hours of sleep") + 
 	labs(title = "Time went to sleep and hours of sleep")
 
 ggplot(data_MeanTimeOfSleep) + 
 	geom_bar(mapping = aes(x = OrderedTimeOfSleep, y = QualityOfSleep_avg, fill = OrderedTimeOfSleep), stat ="identity") + 
-	scale_fill_manual(values=c("#b4f0d5","#b4f0e7","#afeaf0","#afdbf0","#92cdf0", "#97c6f7", "#7b9ae8", "#9da8fa", "#9681f0")) +
+	scale_fill_manual(values=c("#b4f0d5","#b4f0e7","#afeaf0","#afdbf0","#92cdf0", "#97c6f7", "#7b9ae8", "#7682de", "#6470cc")) +
 	xlab("Time went to sleep") + 
 	ylab("Average quality of sleep") + 
 	labs(title = "Time went to sleep and rated quality of sleep", fill = "Time went to sleep")
+
+
+
+ggplot(data, aes(x = QualityOfSleep, y = TimesWakeUp)) + geom_point()
+
+

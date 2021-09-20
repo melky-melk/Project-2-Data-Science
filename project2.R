@@ -100,10 +100,8 @@ ggplot(data, aes(x = HoursOfSleep, y = TimesWakeUp)) + geom_point()
 unique(data$TimeOfSleep)
 #sk
 data$OrderedTimeOfSleep <- factor(data$TimeOfSleep, levels = c("earlier than 7:00pm", "7:00pm - 8:00pm", "8:00pm - 9:00pm", 
-																"9:00pm - 10:00pm" ,"10:00pm - 11:00pm", "11:00pm - 12:00am", 
-																"12:00am - 1:00am", "1:00am - 2:00am", "after 2:00am"))
-
-data$OrderedTimeOfSleep
+															   "9:00pm - 10:00pm" ,"10:00pm - 11:00pm", "11:00pm - 12:00am", 
+															   "12:00am - 1:00am", "1:00am - 2:00am", "after 2:00am"))
 
 ggplot(data, aes(x = OrderedTimeOfSleep)) + geom_bar()
 
