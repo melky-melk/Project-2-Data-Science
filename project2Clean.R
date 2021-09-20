@@ -18,6 +18,7 @@ data_aggrigateByAlcohol <- data %>%
 	#Calculate the mean and label it "avg"; calculate the median and label it "med".  Remove any null values with the na.rm=TRUE
 	summarise_at(vars(HoursOfSleep,TimesWakeUp, QualityOfSleep), list(avg = ~mean(., na.rm=TRUE), med = ~median(., na.rm=TRUE)))
 
+# column graph
 ggplot(data = data_aggrigateByAlcohol) + 
 	geom_bar(mapping = aes(x = OrderedAlcoholConsumed, y = TimesWakeUp_avg, fill = OrderedAlcoholConsumed), stat ="identity") + 
 	
@@ -27,7 +28,17 @@ ggplot(data = data_aggrigateByAlcohol) +
 	#putting all the labels
 	xlab("Number of standard drinks consumed per week") + 
 	ylab("Average number of times woken up during sleep") + 
-	labs(title = "Times woken up against alcohol consumption")
+	labs(title = "Times woken up against alcohol consumption", fill = "Consumption of Alcohol (standard drinks)")
+
+
+#box plot for the same 
+ggplot(data) + 
+	geom_boxplot(aes(x = TimesWakeUp, y = OrderedAlcoholConsumed, fill = OrderedAlcoholConsumed)) + 
+	scale_fill_manual(values=c("#e359c1", "#bf4389", "#a13564", "#7d2538", "#e35959","#e37c59","#e39c59","#fccf53","#ffdf87")) + 
+	ylab("Consumption of Alcohol (standard drinks) per week") + 
+	xlab("Times woken up at night") + 
+	labs(title = "Times woken up against alcohol consumption", fill = "Consumption of Alcohol (standard drinks)")
+
 
 
 ggplot(data = data_aggrigateByAlcohol) + 
@@ -53,12 +64,31 @@ ggplot(data = data_aggrigateByAlcohol) +
 # WIP
 ggplot(data, aes(x = HoursOfSleep, y = OrderedAlcoholConsumed)) + geom_boxplot()
 
-ggplot(data) + 
-	geom_boxplot(aes(x = TimesWakeUp, y = OrderedAlcoholConsumed, fill = OrderedAlcoholConsumed)) + 
-	scale_fill_manual(values=c("#e359c1", "#bf4389", "#a13564", "#7d2538", "#e35959","#e37c59","#e39c59","#e3ac59","#e3be59")) + 
-	ylab("Number of standard drinks consumed per week") + 
-	xlab("Times woken up at night")
-	
 ?ggplot
+data$QualityOfSleep
 
+data$OrderedTimeOfSleep <- factor(data$TimeOfSleep, levels = c("earlier than 7:00pm", "7:00pm - 8:00pm", "8:00pm - 9:00pm", 
+															   "9:00pm - 10:00pm" ,"10:00pm - 11:00pm", "11:00pm - 12:00am", 
+															   "12:00am - 1:00am", "1:00am - 2:00am", "after 2:00am"))
 
+## Create a new data frame called data_aggrigateByAlcohol, using the original data set
+data_MeanTimeOfSleep <- data %>% 
+	## group this data by the Alcohol the person consumed
+	group_by(OrderedTimeOfSleep) %>%  
+	## summarise the variables Hours of sleep and times woken up at this class level. 
+	#Calculate the mean and label it "avg"; calculate the median and label it "med".  Remove any null values with the na.rm=TRUE
+	summarise_at(vars(HoursOfSleep,TimesWakeUp, QualityOfSleep), list(avg = ~mean(., na.rm=TRUE), med = ~median(., na.rm=TRUE)))
+
+ggplot(data_MeanTimeOfSleep) + 
+	geom_bar(mapping = aes(x = OrderedTimeOfSleep, y = HoursOfSleep_avg, fill = OrderedTimeOfSleep), stat ="identity") + 
+	scale_fill_manual(values=c("#b4f0d5","#b4f0e7","#afeaf0","#afdbf0","#92cdf0", "#97c6f7", "#7b9ae8", "#9da8fa", "#9681f0")) +
+	xlab("Number of standard drinks consumed per week") + 
+	ylab("Average hours of sleep") + 
+	labs(title = "Time went to sleep and hours of sleep")
+
+ggplot(data_MeanTimeOfSleep) + 
+	geom_bar(mapping = aes(x = OrderedTimeOfSleep, y = QualityOfSleep_avg, fill = OrderedTimeOfSleep), stat ="identity") + 
+	scale_fill_manual(values=c("#b4f0d5","#b4f0e7","#afeaf0","#afdbf0","#92cdf0", "#97c6f7", "#7b9ae8", "#9da8fa", "#9681f0")) +
+	xlab("Time went to sleep") + 
+	ylab("Average quality of sleep") + 
+	labs(title = "Time went to sleep and rated quality of sleep", fill = "Time went to sleep")
